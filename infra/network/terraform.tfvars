@@ -1,4 +1,4 @@
-region="us-east-1"
+region="ap-south-1"
 default_tags={ ENV = "testing", created = "by terraform", Owner = "bhavnesh" }
 vpc_cidr="10.0.0.0/16"
 vpc_tag="terra-ninja-vpc-01"

@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket = "my-tool-scylladb"
-    key    = "my-tool-scylla/network.tfstate"
-    region = "us-east-1"
+    bucket = "my-tool-scylladb-new"
+    key    = "my-tool-scylla-new/network.tfstate"
+    region = "ap-south-1"
   }
 }
