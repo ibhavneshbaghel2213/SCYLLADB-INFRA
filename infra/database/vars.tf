@@ -27,7 +27,8 @@ variable "rout-priv" {
 
 variable "ami_id" {   
     type = string
-    default = "ami-044372abac4c11997"
+    default = "ami-0e001c9271cf7f3b9"
+    
     description = "ami id"
 }
 
@@ -39,7 +40,7 @@ variable "key_name" {
 
 variable "volume_size" {   
     type = number
-    default = 8
+    default = 20
     description = "size"
 }
 
@@ -57,7 +58,7 @@ variable "encrypted_volume" {
 
 variable "count_ec2_private" {   
     type = string
-    default = "2"
+    default = "3"
     description = "instance count"
 }
 
@@ -76,7 +77,7 @@ variable "private_name" {
 
 variable "private_instance_type" {   
     type = string
-    default = "t2.micro"
+    default = "t2.xlarge"
     description = "instance type private"
 }
 
@@ -95,7 +96,7 @@ variable "private_tags" {
   
   }
 
-variable "subnet_cidr-priv" {
+variable "subnet_cidr_priv" {
     type = list(string)
     default = ["10.0.3.0/24","10.0.4.0/24"]
     description = "cidr for subnet private"

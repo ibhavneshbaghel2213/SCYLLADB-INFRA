@@ -8,3 +8,8 @@ output "igw_id" {
   value       = aws_internet_gateway.igw.id
 }
 
+output "vpc_cider" {
+  value = aws_vpc.terra-ninja-vpc-01.cidr_block
+  
+}
+

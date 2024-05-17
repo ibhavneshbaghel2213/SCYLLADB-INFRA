@@ -8,6 +8,10 @@ output "igw_id" {
   value       = module.vpc.igw_id
 }
 
+output "vpc_cider" {
+  value    =    module.vpc.vpc_cider
+}
+
 output "public_sub_ids" {
   description = "public subnet ids"
   value       = module.subnet.public_sub_ids

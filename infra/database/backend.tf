@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket = "final-assessment"
-    key    = "env/final-assessment/redis.tfstate"
+    bucket = "my-tool-scylladb"
+    key    = "my-tool-scylladb/scylla.tfstate"
     region = "us-east-1"
   }
 }
@@ -9,8 +9,8 @@ terraform {
 data "terraform_remote_state" "network" {
   backend = "s3"
   config = {
-    bucket = "final-assessment"
-    key    = "env/final-assessment/network.tfstate"
+    bucket = "my-tool-scylladb"
+    key    = "my-tool-scylladb/network.tfstate"
     region = "us-east-1"
   }
 }
@@ -18,8 +18,8 @@ data "terraform_remote_state" "network" {
 data "terraform_remote_state" "monitoring" {
   backend = "s3"
   config = {
-    bucket = "final-assessment"
-    key    = "env/final-assessment/monitoring.tfstate"
+    bucket = "my-tool-scylladb"
+    key    = "my-tool-scylladb/monitoring.tfstate"
     region = "us-east-1"
   }
 }
@@ -27,8 +27,8 @@ data "terraform_remote_state" "monitoring" {
 data "terraform_remote_state" "openvpn" {
   backend = "s3"
   config = {
-    bucket = "final-assessment"
-    key    = "env/final-assessment/openvpn.tfstate"
+    bucket = "my-tool-scylladb"
+    key    = "my-tool-scylladb/openvpn.tfstate"
     region = "us-east-1"
   }
 }

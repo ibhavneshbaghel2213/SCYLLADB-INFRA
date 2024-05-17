@@ -14,7 +14,7 @@ variable "vpc_id" {}
 
 variable "zone" {   
     type = list(string)
-    default = ["us-east-1a","us-east-1b"]
+    default = ["ap-south-1a","ap-south-1b"]
     description = "availibity zone"
 }
 
