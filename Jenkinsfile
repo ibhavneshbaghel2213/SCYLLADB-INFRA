@@ -1,65 +1,48 @@
 pipeline {
     agent any
+
+    parameters {
+        booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
+        choice(name: 'action', choices: ['apply', 'destroy'], description: 'Select the action to perform')
+    }
+
+    environment {
+        AWS_ACCESS_KEY_ID     = credentials('aws-access-key')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
+    }
+
     stages {
-        stage('Parameters'){
-                steps {
-                    script {
-                    properties([
-                            parameters([                  
-                             string(defaultValue: 'database', description: 'path of code directory', name: 'code_dir'),
-                             
-                            ])
-                        ])
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/ibhavneshbaghel2213/SCYLLADB-INFRA.git'
+            }
+        }
+        stage('Terraform init') {
+            steps {
+                sh 'terraform init'
+            }
+        }
+        stage('Plan') {
+            steps {
+                sh 'terraform plan -out tfplan'
+                sh 'terraform show -no-color tfplan > myTerraformPlan.txt'
+            }
+        }
+        stage('Apply / Destroy') {
+            steps {
+                script {
+                    if (params.action == 'apply') {
+                        if (!params.autoApprove) {
+                            def plan = readFile 'myTerraformPlan.txt'
+                            input message: "Do you want to apply the plan?",
+                            parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
+                        }
+
+                        sh 'terraform ${action} -input=false tfplan'
+                    } else if (params.action == 'destroy') {
+                        sh 'terraform ${action} --auto-approve'
+                    } else {
+                        error "Invalid action selected. Please choose either 'apply' or 'destroy'."
                     }
                 }
-            }    
-        stage('clean Workspace') {
-            steps { 
-                cleanWs ()
             }
-        }
-        stage('git clone') {
-            steps {
-                git branch: 'terraform', credentialsId: '27bbe006-7541-42ae-be76-7a5ca6e59058', url: 'https://gitlab.com/bhavnesh.baghel22/final-assessment.git'
-            }
-        }
-
-        stage('terraform Init') {
-            steps{
-                dir("${code_dir}") {
-                    sh 'terraform init'
-                }
-               
-            }
-        }
-        stage('terraform plan') {
-            steps{
-                dir("${code_dir}") {
-                    sh 'terraform plan'
-                }
-               
-            }
-        }
-        stage('terraform approval') {
-            steps{
-                input 'Do you want to approve'
-                }
-            }
-        stage('terraform apply') {
-            steps{
-                dir("${code_dir}") {
-                    sh 'terraform apply --auto-approve'
-                }
-                
-            }
-        }
-        stage('Slack Notification') {
-            steps{
-                dir("${code_dir}") {
-                    slackSend channel: '#redis-tool-notification', message: "${code_dir} Infra Created Successfully", teamDomain: 'opstree', tokenCredentialId: '1df1ee9f-ed1b-46cd-b16e-177a8b240cb0'
-                }
-            }
-        }
-        
-    }
-}
