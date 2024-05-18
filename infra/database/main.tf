@@ -22,42 +22,28 @@ module "scylla_ec2" {
       to_port                  = 22
       protocol                 = "tcp"
       description              = "22 port open for Jenkins SG"
-      source_security_group_id = sg-082eaa4bcc918b339#data.terraform_remote_state.jenkins.outputs.jenkins_sg_id 
-    },
-    # {
-    #   from_port                = 9100
-    #   to_port                  = 9100
-    #   protocol                 = "tcp"
-    #   description              = "9100 port of Node Exporter open for monitoring SG"
-    #   source_security_group_id = data.terraform_remote_state.monitoring.outputs.monitoring_sg_id 
-    # },
-    {
-      from_port                = 22
-      to_port                  = 22
-      protocol                 = "tcp"
-      description              = "22 port open for OpenVPN SG"
-      source_security_group_id = data.terraform_remote_state.openvpn.outputs.openvpn_sg_id 
+      source_security_group_id = "sg-082eaa4bcc918b339"
     },
     {
       from_port                = 7000
       to_port                  = 7000
       protocol                 = "tcp"
       description              = "7000 port for internode communication (non-SSL)"
-      source_security_group_id = module.scylla_ec2.private_ec2_sg_id
+      source_security_group_id = "sg-082eaa4bcc918b339"
     },
     {
       from_port                = 7001
       to_port                  = 7001
       protocol                 = "tcp"
       description              = "7001 port for internode communication (SSL)"
-      source_security_group_id = module.scylla_ec2.private_ec2_sg_id
+      source_security_group_id = "sg-082eaa4bcc918b339"
     },
     {
       from_port                = 9042
       to_port                  = 9042
       protocol                 = "tcp"
       description              = "9042 port for CQL client connections"
-      source_security_group_id = module.scylla_ec2.private_ec2_sg_id
+      source_security_group_id = "sg-082eaa4bcc918b339"
     },
     # {
     #   from_port                = 9180
@@ -78,7 +64,7 @@ module "scylla_ec2" {
       to_port                  = 7199
       protocol                 = "tcp"
       description              = "7199 port for JMX monitoring"
-      source_security_group_id = module.scylla_ec2.private_ec2_sg_id
+      source_security_group_id = "sg-082eaa4bcc918b339"
     }
   ]
   number_of_ingress_with_source_security_group_id = 9

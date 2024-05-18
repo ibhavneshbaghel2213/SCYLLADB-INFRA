@@ -29,61 +29,94 @@ resource "aws_security_group" "private-security-group" {
   }
 }
 
-resource "aws_security_group_rule" "ingress_with_source_security_group_id" {
-  count = local.create ? var.number_of_ingress_with_source_security_group_id : 0
+# resource "aws_security_group_rule" "ingress_with_source_security_group_id" {
+#   count = local.create ? var.number_of_ingress_with_source_security_group_id : 0
 
-  security_group_id = aws_security_group.private-security-group.id
-  type              = "ingress"
-  source_security_group_id = var.ingress_with_source_security_group_id[count.index]["source_security_group_id"]
+#   security_group_id = aws_security_group.private-security-group.id
+#   type              = "ingress"
+#   source_security_group_id = var.ingress_with_source_security_group_id[count.index]["source_security_group_id"]
   
-  description = lookup(
-    var.ingress_with_source_security_group_id[count.index],
-    "description",
-    "Ingress Rule",
-  )
+#   description = lookup(
+#     var.ingress_with_source_security_group_id[count.index],
+#     "description",
+#     "Ingress Rule",
+#   )
 
-  from_port = lookup(
-    var.ingress_with_source_security_group_id[count.index],
-    "from_port",
+#   from_port = lookup(
+#     var.ingress_with_source_security_group_id[count.index],
+#     "from_port",
    
-  )
-  to_port = lookup(
-    var.ingress_with_source_security_group_id[count.index],
-    "to_port",
-    )
-  protocol = lookup(
-    var.ingress_with_source_security_group_id[count.index],
-    "protocol",
-  )
-}
+#   )
+#   to_port = lookup(
+#     var.ingress_with_source_security_group_id[count.index],
+#     "to_port",
+#     )
+#   protocol = lookup(
+#     var.ingress_with_source_security_group_id[count.index],
+#     "protocol",
+#   )
+# }
  
+# resource "aws_instance" "private_host" {
+#   count                       = var.count_ec2_private
+#   ami                         = var.ami_id
+#   instance_type               = var.private_instance_type
+#   associate_public_ip_address = var.private_ec2_public_ip
+#   key_name                    = var.key_name
+#   iam_instance_profile        = var.iam_instance_profile != "" ? var.iam_instance_profile : null
+#   availability_zone           = element(var.zone,count.index)
+#   subnet_id                   = element(var.private_subnet_id,count.index)
+#   vpc_security_group_ids      = [aws_security_group.private-security-group.id]
+#   root_block_device {
+#     volume_size = var.volume_size
+#     volume_type = var.volume_type
+#     encrypted   = var.encrypted_volume
+#   }
+#   tags = merge(
+#     {
+      
+#       Name = format("%s","${var.private_name}-${count.index+1}")
+#     },
+#     var.private_tags,
+#   )
+# }
+
 resource "aws_instance" "private_host" {
   count                       = var.count_ec2_private
   ami                         = var.ami_id
   instance_type               = var.private_instance_type
-  associate_public_ip_address = var.private_ec2_public_ip
+  # associate_public_ip_address = var.private_ec2_public_ip
   key_name                    = var.key_name
-  iam_instance_profile        = var.iam_instance_profile != "" ? var.iam_instance_profile : null
-  availability_zone           = element(var.zone,count.index)
-  subnet_id                   = element(var.private_subnet_id,count.index)
-  vpc_security_group_ids      = [aws_security_group.private-security-group.id]
+  # iam_instance_profile        = var.iam_instance_profile != "" ? var.iam_instance_profile : null
+  availability_zone           = element(var.zone, count.index)
+  subnet_id                   = element(var.private_subnet_id, count.index)
+  # vpc_security_group_ids      = [aws_security_group.private-security-group.id]
+  
   root_block_device {
     volume_size = var.volume_size
     volume_type = var.volume_type
     encrypted   = var.encrypted_volume
   }
+  
   tags = merge(
     {
-      
-      Name = format("%s","${var.private_name}-${count.index+1}")
+      Name = format("%s", "${var.private_name}-${count.index + 1}")
     },
     var.private_tags,
   )
 }
 
+
 resource "aws_key_pair" "privatekey" {
-  key_name   =  var.key_name
+  count      = var.create_key_pair ? 1 : 0
+  key_name   = var.key_name
   public_key = var.public_key
+}
+
+variable "create_key_pair" {
+  description = "Whether to create the key pair"
+  type        = bool
+  default     = false
 }
 
 locals {

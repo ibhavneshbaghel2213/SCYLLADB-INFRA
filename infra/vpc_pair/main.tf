@@ -5,7 +5,7 @@ resource "aws_vpc_peering_connection" "vpc_peering" {
 }
 
 resource "aws_route" "route_to_vpc_2" {
-  route_table_id            = rtb-08fe8d2504f25eba2
+  route_table_id            = "rtb-08fe8d2504f25eba2"
   destination_cidr_block    = data.terraform_remote_state.network.outputs.vpc_cider
   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peering.id
 }

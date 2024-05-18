@@ -9,7 +9,7 @@ variable private_security_group_name {
 
 variable "zone" {   
     type = list(string)
-    default = ["us-east-1a","us-east-1b"]
+    default = ["ap-south-1a","ap-south-1b"]
     description = "availibity zone"
 }
 
@@ -27,8 +27,7 @@ variable "rout-priv" {
 
 variable "ami_id" {   
     type = string
-    default = "ami-0e001c9271cf7f3b9"
-    
+    default = "ami-05e00961530ae1b55"
     description = "ami id"
 }
 
@@ -106,7 +105,7 @@ variable "subnet_cidr_priv" {
 
 variable "region" {   
     type = string
-    default = "us-east-1"
+    default = "ap-south-1"
     description = "vpc region"
 }
 

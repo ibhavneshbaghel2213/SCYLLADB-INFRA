@@ -31,7 +31,7 @@ variable "cidr_block_vpc_2" {
 variable "jenkins_sg_id" {
   description = "The Security Group ID of the Jenkins server"
   type        = string
-  default = sg-082eaa4bcc918b339
+  default = "sg-082eaa4bcc918b339"
 }
 
 variable "jenkins_port" {
